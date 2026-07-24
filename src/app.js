@@ -396,27 +396,74 @@ function renderComposition() {
   const compactAtPercent = 80;
   const compactions = state.session.compactionTurns.filter((turn) => turn <= request.turn).length;
   const sourceEntries = buildFlowSources(compositionRows);
-  const circleTop = 142;
   const circleBottom = 558;
   const sedimentHeight = (416 * fillPercent) / 100;
-  const sedimentTop = circleBottom - sedimentHeight;
-  const sedimentGrowSeconds = 1.8;
+  const packetSeconds = 0.72;
+  const layerGrowSeconds = 0.48;
+  const sequenceGapSeconds = 0.1;
+  const sequenceStepSeconds = packetSeconds + layerGrowSeconds + sequenceGapSeconds;
+  const sequenceDuration = Math.max(0.01, compositionRows.length * sequenceStepSeconds);
   let sedimentY = circleBottom;
+  let layerRevealDefinitions = "";
   const sedimentLayers = compositionRows
     .map((row, index) => {
+      const meta = CATEGORY_META[row.category];
       const height = inputTokens > 0 ? (sedimentHeight * row.tokens) / inputTokens : 0;
+      const finalHeight = Math.max(0.75, height);
       sedimentY -= height;
+      const layerBegin = index * sequenceStepSeconds + packetSeconds;
+      const layerStartY = sedimentY + finalHeight;
+      layerRevealDefinitions += `
+        <clipPath id="sediment-layer-reveal-${index}">
+          <rect x="390" y="${layerStartY.toFixed(2)}" width="420" height="0">
+            <animate
+              attributeName="y"
+              from="${layerStartY.toFixed(2)}"
+              to="${sedimentY.toFixed(2)}"
+              begin="${layerBegin.toFixed(2)}s"
+              dur="${layerGrowSeconds}s"
+              fill="freeze"
+              calcMode="spline"
+              keyTimes="0;1"
+              keySplines="0.22 1 0.36 1"
+            />
+            <animate
+              attributeName="height"
+              from="0"
+              to="${finalHeight.toFixed(2)}"
+              begin="${layerBegin.toFixed(2)}s"
+              dur="${layerGrowSeconds}s"
+              fill="freeze"
+              calcMode="spline"
+              keyTimes="0;1"
+              keySplines="0.22 1 0.36 1"
+            />
+          </rect>
+        </clipPath>
+      `;
       return `
-        <rect
+        <g
           class="sediment-layer"
-          x="390"
-          y="${sedimentY.toFixed(2)}"
-          width="420"
-          height="${Math.max(0.75, height).toFixed(2)}"
-          fill="url(#sediment-${index % 9})"
+          style="--sediment-color:${meta.color}"
+          clip-path="url(#sediment-layer-reveal-${index})"
         >
           <title>${escapeHtml(CATEGORY_META[row.category].label)}: ${formatTokens(row.tokens)}</title>
-        </rect>
+          <rect
+            class="sediment-color"
+            x="390"
+            y="${sedimentY.toFixed(2)}"
+            width="420"
+            height="${finalHeight.toFixed(2)}"
+          />
+          <rect
+            class="sediment-pattern"
+            x="390"
+            y="${sedimentY.toFixed(2)}"
+            width="420"
+            height="${finalHeight.toFixed(2)}"
+            fill="url(#sediment-${index % 9})"
+          />
+        </g>
       `;
     })
     .join("");
@@ -424,16 +471,34 @@ function renderComposition() {
     .map(({ row, slot }, index) => renderFlowSource(row, slot, index))
     .join("");
   const sourcePaths = sourceEntries
-    .map(({ slot }, index) => {
+    .map(({ row, slot }, index) => {
+      const meta = CATEGORY_META[row.category];
+      const packetBegin = index * sequenceStepSeconds;
       return `
-        <path id="flow-path-${index}" class="flow-path" d="${slot.path}" />
-        <circle class="flow-particle flow-particle-primary" r="3">
-          <animateMotion dur="${(2.35 + (index % 5) * 0.18).toFixed(2)}s" begin="${(
-            index * -0.31
-          ).toFixed(2)}s" repeatCount="indefinite">
-            <mpath href="#flow-path-${index}" />
-          </animateMotion>
-        </circle>
+        <g class="source-flow" style="--source-color:${meta.color}">
+          <path id="flow-path-${index}" class="flow-path" d="${slot.path}" />
+          <circle class="flow-particle flow-particle-primary" r="3" style="opacity:0">
+            <animate
+              attributeName="opacity"
+              values="0;0.9;0.9;0"
+              keyTimes="0;0.08;0.9;1"
+              begin="${packetBegin.toFixed(2)}s"
+              dur="${packetSeconds}s"
+              fill="freeze"
+            />
+            <animateMotion
+              begin="${packetBegin.toFixed(2)}s"
+              dur="${packetSeconds}s"
+              repeatCount="1"
+              fill="freeze"
+              calcMode="spline"
+              keyTimes="0;1"
+              keySplines="0.25 1 0.5 1"
+            >
+              <mpath href="#flow-path-${index}" />
+            </animateMotion>
+          </circle>
+        </g>
       `;
     })
     .join("");
@@ -459,45 +524,20 @@ function renderComposition() {
         >
           <title id="flow-title">All contributors to this Codex context</title>
           <desc id="flow-description">
-            Every non-zero context category flows toward the selected model request. Patterned
-            layers grow inside the context window, scaled to the official input token count and
-            model capacity.
+            Every non-zero context category flows toward the selected model request once, one
+            category at a time. After each packet arrives, its patterned layer grows inside the
+            context window.
           </desc>
           <defs>
             <clipPath id="context-window-clip">
               <circle cx="600" cy="350" r="208" />
             </clipPath>
-            <clipPath id="sediment-grow-clip">
-              <rect x="390" y="${circleBottom}" width="420" height="0">
-                <animate
-                  attributeName="y"
-                  from="${circleBottom}"
-                  to="${sedimentTop.toFixed(2)}"
-                  dur="${sedimentGrowSeconds}s"
-                  fill="freeze"
-                  calcMode="spline"
-                  keyTimes="0;1"
-                  keySplines="0.22 1 0.36 1"
-                />
-                <animate
-                  attributeName="height"
-                  from="0"
-                  to="${sedimentHeight.toFixed(2)}"
-                  dur="${sedimentGrowSeconds}s"
-                  fill="freeze"
-                  calcMode="spline"
-                  keyTimes="0;1"
-                  keySplines="0.22 1 0.36 1"
-                />
-              </rect>
-            </clipPath>
+            ${layerRevealDefinitions}
             ${renderSedimentPatterns()}
           </defs>
 
-          <g clip-path="url(#sediment-grow-clip)">
-            <g class="sediment" clip-path="url(#context-window-clip)">
-              ${sedimentLayers}
-            </g>
+          <g class="sediment" clip-path="url(#context-window-clip)">
+            ${sedimentLayers}
           </g>
 
           ${sourcePaths}
@@ -519,9 +559,10 @@ function renderComposition() {
       </div>
       <div class="flow-caption">
         <p>
-          Every non-zero category has a source and moving packet. The context sediment grows to the
-          request’s reported fullness, with one patterned layer per category. Motion is
-          illustrative; displayed token values come from the selected Codex rollout request.
+          Categories enter sequentially. One packet travels from its source to the request once;
+          then its matching color-coded layer grows inside the circle before the next category
+          begins. Motion is illustrative; displayed token values come from the selected Codex
+          rollout request.
         </p>
         <p>
           ${formatInteger(inputTokens - unresolvedTokens)} tokens map to visible items and explicit
@@ -563,7 +604,7 @@ function renderComposition() {
   const replay = elements.compositionVisual.querySelector("#flow-replay");
 
   if (reducedMotion()) {
-    diagram.setCurrentTime(sedimentGrowSeconds);
+    diagram.setCurrentTime(sequenceDuration);
     diagram.pauseAnimations();
     diagram.classList.add("is-reduced-motion");
     toggle.textContent = "motion off";
@@ -638,7 +679,10 @@ function renderFlowSource(row, slot, index) {
   const anchor = isLeft ? "start" : "end";
 
   return `
-    <g class="flow-source flow-source-${index}">
+    <g
+      class="flow-source flow-source-${index}"
+      style="--source-color:${meta.color}"
+    >
       <text
         class="diagram-label source-title"
         x="${labelX}"

@@ -12,11 +12,13 @@ Start the local app, choose a real Codex session from the dropdown, and inspect:
 
 The primary purpose is context transparency. The retention lens is supporting information and is off by default.
 
-The main diagram gives every non-zero category its own source and animated packet. All categories
-accumulate as patterned layers inside the context window, growing from empty to the selected
-request's reported fullness. Packet movement is illustrative; token labels and fill depth come
-from the selected Codex request. Pause and replay govern both packet flow and sediment growth.
-Motion is removed when the operating system requests reduced motion.
+The main diagram gives every non-zero category its own source and one animated packet. Categories
+run sequentially: a packet travels to the request once, its matching color-coded and patterned
+layer grows inside the context window, and only then does the next category begin. The completed
+diagram remains static. Each source icon, packet, and boundary node repeats the same category color.
+Packet movement is illustrative; token labels and fill depth come from the selected Codex request.
+Pause and replay govern the shared sequence. Motion is removed when the operating system requests
+reduced motion.
 
 ## Run it
 

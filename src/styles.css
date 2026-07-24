@@ -641,7 +641,7 @@ code {
 }
 
 .junction-dot {
-  fill: var(--ink);
+  fill: color-mix(in oklch, var(--source-color) 76%, var(--ink));
 }
 
 .flow-particle {
@@ -650,13 +650,13 @@ code {
 }
 
 .flow-particle-primary {
-  fill: var(--ink);
+  fill: color-mix(in oklch, var(--source-color) 82%, var(--ink));
   opacity: 0.86;
 }
 
 .source-glyph {
   fill: none;
-  stroke: var(--ink);
+  stroke: color-mix(in oklch, var(--source-color) 76%, var(--ink));
   stroke-width: 1.15;
 }
 
@@ -709,12 +709,16 @@ code {
 }
 
 .sediment {
-  opacity: 0.76;
+  opacity: 1;
 }
 
-.sediment-layer {
-  stroke: color-mix(in oklch, var(--ink-soft) 35%, transparent);
-  stroke-width: 0.55;
+.sediment-color {
+  fill: color-mix(in oklch, var(--sediment-color) 52%, var(--bg));
+}
+
+.sediment-pattern {
+  stroke: color-mix(in oklch, var(--sediment-color) 62%, var(--ink));
+  stroke-width: 0.65;
 }
 
 .sediment pattern path,

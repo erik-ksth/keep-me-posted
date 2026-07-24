@@ -10,7 +10,9 @@ that the data is a simulation.
 ## Color strategy
 
 Mostly monochrome product shell with one electric-blue focus color and a muted, named
-visualization palette. Category color is always paired with a text label or geometric marker.
+visualization palette. Inside the context window, every category uses its own tinted sediment
+layer while retaining a distinct pattern. The corresponding source icon, boundary node, and moving
+packet repeat that color. Category color is always paired with a text label and geometric pattern.
 
 ```css
 --bg: oklch(0.965 0.012 90);
@@ -71,10 +73,11 @@ moderate tracking; prose remains sentence case. Keep the scale compact and fixed
 
 ## Motion
 
-Small packets continuously travel from every non-zero contributor through the context-window
-boundary to the selected request. When a request is selected or replayed, the patterned sediment
-rises from zero to the request's reported fullness over 1.8 seconds. Packet cadence is
-illustrative; category values, layers, and sediment depth are data-driven. Pause and replay
-controls govern both motions. Use 160–220ms ease-out transitions for selection and disclosure.
-Under reduced motion, packets are hidden, the final sediment state is shown immediately, and
-motion controls are disabled.
+Categories animate as one deterministic sequence, ordered by token contribution. A single packet
+travels from one source through the context-window boundary to the selected request. Only after it
+arrives does that category's colored, patterned sediment layer grow; the next category waits until
+the layer finishes. Each packet runs once and the completed diagram remains static. Pause and
+replay govern the shared sequence. Category values, layer heights, and final sediment depth are
+data-driven. Use 160–220ms ease-out transitions for selection and disclosure. Under reduced
+motion, packets are hidden, the final sediment state is shown immediately, and motion controls are
+disabled.
