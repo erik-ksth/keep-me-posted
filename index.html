@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Inspect the observable contents and token composition of a local Codex context window."
+    />
+    <title>Context Window Inspector</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to context analysis</a>
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </span>
+        <div>
+          <p class="brand-name">Context Window Inspector</p>
+          <p class="brand-subtitle">Codex rollout analysis</p>
+        </div>
+      </div>
+      <div class="privacy-note">
+        <span class="privacy-dot" aria-hidden="true"></span>
+        Runs locally in this browser
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="load-section" aria-labelledby="load-title">
+        <div>
+          <h1 id="load-title">See what the model is carrying.</h1>
+          <p>
+            Open a Codex rollout JSONL file to reconstruct each request’s observable
+            context—messages, file contents, tool results, changes, images, and token counters.
+          </p>
+        </div>
+        <label class="file-control" id="file-drop">
+          <input id="file-input" type="file" accept=".jsonl,.ndjson,.json,text/plain" />
+          <span class="file-action">Open rollout file</span>
+          <span class="file-hint">or drop it here · nothing is uploaded</span>
+        </label>
+      </section>
+
+      <section id="workspace" class="workspace" aria-live="polite">
+        <div id="session-bar" class="session-bar"></div>
+        <div id="request-facts" class="request-facts"></div>
+
+        <section class="analysis-section" aria-labelledby="composition-title">
+          <div class="section-heading">
+            <div>
+              <h2 id="composition-title">Context composition</h2>
+              <p>Estimated item-level composition reconciled to the official input-token total.</p>
+            </div>
+            <button class="text-button" id="methodology-button" type="button" aria-expanded="false">
+              How reconstruction works
+            </button>
+          </div>
+          <div id="methodology" class="methodology" hidden></div>
+          <div class="composition-layout">
+            <div id="composition-visual" class="composition-visual"></div>
+            <div id="composition-breakdown" class="composition-breakdown"></div>
+          </div>
+        </section>
+
+        <section class="analysis-section" aria-labelledby="timeline-title">
+          <div class="section-heading">
+            <div>
+              <h2 id="timeline-title">How the window changes</h2>
+              <p>Select a turn to inspect its terminal model request.</p>
+            </div>
+            <div id="turn-selector" class="turn-selector"></div>
+          </div>
+          <div id="timeline" class="timeline"></div>
+        </section>
+
+        <section class="analysis-section contents-section" aria-labelledby="contents-title">
+          <div class="section-heading contents-heading">
+            <div>
+              <h2 id="contents-title">Items in this context</h2>
+              <p id="contents-summary"></p>
+            </div>
+            <label class="retention-toggle">
+              <input id="retention-toggle" type="checkbox" />
+              <span class="toggle-track" aria-hidden="true"><span></span></span>
+              <span>
+                Retention lens
+                <small>Show items that may no longer be useful to carry</small>
+              </span>
+            </label>
+          </div>
+          <div class="contents-layout">
+            <aside id="category-filters" class="category-filters" aria-label="Filter context items"></aside>
+            <div class="items-column">
+              <div class="item-tools">
+                <label class="search-control">
+                  <span class="visually-hidden">Search context items</span>
+                  <input id="item-search" type="search" placeholder="Search paths, commands, and message text" />
+                </label>
+                <span id="item-count" class="item-count"></span>
+              </div>
+              <div id="context-items" class="context-items"></div>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <template id="empty-template">
+      <div class="empty-state">
+        <p>No matching context items.</p>
+        <span>Try another category or clear the search.</span>
+      </div>
+    </template>
+
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>
