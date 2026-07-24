@@ -1498,8 +1498,8 @@ code {
   }
 
   .flow-diagram {
-    width: 780px;
-    min-height: 455px;
+    width: 900px;
+    min-height: 525px;
   }
 
   .request-facts {

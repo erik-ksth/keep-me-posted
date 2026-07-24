@@ -608,9 +608,9 @@ function buildFlowSources(rows) {
       const horizontalOffset = Math.sqrt(Math.max(0, 208 ** 2 - verticalOffset ** 2));
       const isLeft = side === "left";
       const junctionX = 600 + (isLeft ? -horizontalOffset : horizontalOffset);
-      const glyphX = isLeft ? 190 : 1010;
-      const startX = isLeft ? 224 : 976;
-      const controlOneX = isLeft ? 306 : 894;
+      const glyphX = isLeft ? 220 : 980;
+      const startX = isLeft ? 254 : 946;
+      const controlOneX = isLeft ? 320 : 880;
       const controlTwoX = junctionX + (isLeft ? -58 : 58);
 
       slotsByCategory.set(row.category, {
