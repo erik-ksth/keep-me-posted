@@ -1,0 +1,3 @@
+{"timestamp":"2026-07-23T18:00:00.000Z","type":"session_meta","payload":{"type":"session_meta","id":"fixture-alpha","cwd":"/Users/example/projects/alpha","model":"codex","base_instructions":{"text":"Keep changes focused."},"dynamic_tools":[{"name":"exec_command"}]}}
+{"timestamp":"2026-07-23T18:00:01.000Z","type":"event_msg","payload":{"type":"user_message","message":"Inspect the alpha project."}}
+{"timestamp":"2026-07-23T18:00:02.000Z","type":"event_msg","payload":{"type":"token_count","info":{"model_context_window":10000,"total_token_usage":{"input_tokens":1200},"last_token_usage":{"input_tokens":1200,"cached_input_tokens":600,"output_tokens":80,"reasoning_output_tokens":40,"total_tokens":1320}}}}

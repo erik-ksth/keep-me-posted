@@ -2,7 +2,7 @@
 
 A local, Codex-only web app for understanding what is inside a model request’s context window.
 
-Drop in a Codex rollout JSONL file and inspect:
+Start the local app, choose a real Codex session from the dropdown, and inspect:
 
 - official input, cached-input, output, reasoning, and context-capacity counters;
 - estimated composition by system instructions, conversation, file contents, searches, commands, code changes, images, and reasoning metadata;
@@ -12,6 +12,12 @@ Drop in a Codex rollout JSONL file and inspect:
 
 The primary purpose is context transparency. The retention lens is supporting information and is off by default.
 
+The main diagram gives every non-zero category its own source and animated packet. All categories
+accumulate as patterned layers inside the context window, growing from empty to the selected
+request's reported fullness. Packet movement is illustrative; token labels and fill depth come
+from the selected Codex request. Pause and replay govern both packet flow and sediment growth.
+Motion is removed when the operating system requests reduced motion.
+
 ## Run it
 
 No installation or build step is required.
@@ -20,7 +26,12 @@ No installation or build step is required.
 npm run dev
 ```
 
-Open [http://localhost:4173](http://localhost:4173). The app starts with a built-in example; use **Open rollout file** to inspect a real session.
+Open [http://localhost:4173](http://localhost:4173). The loopback-only server automatically
+discovers recent JSONL rollouts under `~/.codex/sessions`, loads the most recent supported session,
+and lists the rest in the **Session** dropdown. A session’s full JSONL is read only when selected.
+
+Use **Open additional rollout files** when a rollout lives outside the normal Codex session folder.
+Reloading a rollout with the same Codex session ID updates its existing entry.
 
 Codex rollout files normally live under:
 
@@ -28,7 +39,21 @@ Codex rollout files normally live under:
 ~/.codex/sessions/YYYY/MM/DD/rollout-*.jsonl
 ```
 
-All parsing happens in the browser. Files are not uploaded or persisted.
+The server binds only to `127.0.0.1`. JSONL stays on the local machine, is not uploaded, and is not
+persisted by the app. The browser performs the context reconstruction after receiving the selected
+local file.
+
+To inspect a different session directory:
+
+```bash
+CONTEXT_WINDOW_SESSIONS_DIR=/absolute/path/to/sessions npm run dev
+```
+
+To use a different port:
+
+```bash
+CONTEXT_WINDOW_INSPECTOR_PORT=4180 npm run dev
+```
 
 ## What the numbers mean
 
@@ -108,7 +133,9 @@ npm run check
 
 The project intentionally has no runtime dependencies:
 
+- `server.mjs` serves the app and exposes a loopback-only, path-validated session API.
 - `src/analyzer.js` contains the parser and reconstruction algorithm.
+- `src/session-catalog.js` keeps multiple loaded sessions distinct and selectable.
 - `src/app.js` renders the browser interface.
 - `src/styles.css` contains the responsive design system.
 - `tests/analyzer.test.mjs` verifies accounting and retention behavior.

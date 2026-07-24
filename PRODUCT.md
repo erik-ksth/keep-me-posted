@@ -14,7 +14,7 @@ Individual developers inspecting their own Codex sessions locally. They want to 
 
 ## Product Purpose
 
-Context Window Inspector reconstructs a clear, turn-by-turn view of a Codex context window from a local rollout JSONL file. It shows official request-level token counters alongside estimated item-level composition, explains what each category contains, and lets the developer inspect every locally observable item.
+Context Window Inspector automatically discovers local Codex rollout JSONL files and reconstructs a clear, turn-by-turn view of the selected context window. It shows official request-level token counters alongside estimated item-level composition, explains what each category contains, and lets the developer inspect every locally observable item.
 
 Success means a developer can answer “what is in my context window right now?” quickly, then move from the overview to exact messages, file reads, commands, changes, images, and reasoning metadata without losing orientation.
 

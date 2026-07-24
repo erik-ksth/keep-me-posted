@@ -30,17 +30,23 @@
 
     <main id="main">
       <section class="load-section" aria-labelledby="load-title">
-        <div>
-          <h1 id="load-title">See what the model is carrying.</h1>
-          <p>
-            Open a Codex rollout JSONL file to reconstruct each request’s observable
-            context—messages, file contents, tool results, changes, images, and token counters.
+        <div class="intro-copy">
+          <p class="intro-kicker">Context engineering · observe one agentic session</p>
+          <h1 id="load-title">
+            Context window
+            <span>/ everything quietly filling it</span>
+          </h1>
+          <p class="intro-description">
+            Choose a real Codex session discovered on this Mac and reconstruct each request’s
+            observable context—messages, file contents, tool results, changes, images, and token
+            counters.
           </p>
         </div>
         <label class="file-control" id="file-drop">
-          <input id="file-input" type="file" accept=".jsonl,.ndjson,.json,text/plain" />
-          <span class="file-action">Open rollout file</span>
-          <span class="file-hint">or drop it here · nothing is uploaded</span>
+          <input id="file-input" type="file" accept=".jsonl,.ndjson,.json,text/plain" multiple />
+          <span class="file-action">Open additional rollout files</span>
+          <span class="file-hint">optional fallback · nothing is uploaded</span>
+          <span id="load-status" class="file-status" aria-live="polite"></span>
         </label>
       </section>
 
@@ -51,8 +57,11 @@
         <section class="analysis-section" aria-labelledby="composition-title">
           <div class="section-heading">
             <div>
-              <h2 id="composition-title">Context composition</h2>
-              <p>Estimated item-level composition reconciled to the official input-token total.</p>
+              <h2 id="composition-title">Every context source</h2>
+              <p>
+                Every non-zero category feeds the selected request and grows as a distinct layer
+                inside the context window.
+              </p>
             </div>
             <button class="text-button" id="methodology-button" type="button" aria-expanded="false">
               How reconstruction works

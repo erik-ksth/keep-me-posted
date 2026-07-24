@@ -15,6 +15,8 @@ This repository explains the observable composition of Codex context windows. Co
 
 - Codex rollout JSONL is the only supported input.
 - Analysis must remain local with no upload path.
+- Automatic discovery must bind to loopback only and validate every requested session path.
+- List lightweight metadata first; load full session JSONL only when selected.
 - Keep the project dependency-free unless a dependency materially improves accuracy.
 - Every context view must reconcile exactly to its official `input_tokens`.
 - Add tests for parser or classification changes.
