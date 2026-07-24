@@ -686,12 +686,6 @@ code {
   font-size: 11px;
 }
 
-.compact-line {
-  stroke: var(--ink-soft);
-  stroke-width: 0.9;
-  stroke-dasharray: 3 5;
-}
-
 .agent-halo {
   fill: var(--bg);
   stroke: var(--primary);

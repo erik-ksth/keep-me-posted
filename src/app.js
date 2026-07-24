@@ -393,7 +393,6 @@ function renderComposition() {
   const { compositionRows, inputTokens, unresolvedTokens, fullnessPercent, request } = state.view;
   const capacity = request.modelContextWindow || inputTokens;
   const fillPercent = Math.max(0, Math.min(100, fullnessPercent ?? 100));
-  const compactAtPercent = 80;
   const compactions = state.session.compactionTurns.filter((turn) => turn <= request.turn).length;
   const sourceEntries = buildFlowSources(compositionRows);
   const circleBottom = 558;
@@ -544,10 +543,6 @@ function renderComposition() {
           <circle class="context-window-circle" cx="600" cy="350" r="208" />
           <text class="diagram-label context-label" x="600" y="172" text-anchor="middle">
             CONTEXT WINDOW
-          </text>
-          <line class="compact-line" x1="408" x2="792" y1="225" y2="225" />
-          <text class="diagram-micro compact-label" x="786" y="216" text-anchor="end">
-            COMPACT ${compactAtPercent}%
           </text>
 
           <circle class="agent-halo" cx="600" cy="350" r="10" />
