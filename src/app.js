@@ -476,7 +476,7 @@ function renderComposition() {
       return `
         <g class="source-flow" style="--source-color:${meta.color}">
           <path id="flow-path-${index}" class="flow-path" d="${slot.path}" />
-          <circle class="flow-particle flow-particle-primary" r="3" style="opacity:0">
+          <circle class="flow-particle flow-particle-primary" r="5" style="opacity:0">
             <animate
               attributeName="opacity"
               values="0;0.9;0.9;0"
